@@ -8,7 +8,7 @@ class DatabaseService {
 
   User? user = FirebaseAuth.instance.currentUser;
 
-// Add Todo Task
+  // Add Todo Task
   Future<DocumentReference> addTodoItem(
       String title, String description) async {
     return await todoCollection.add({
@@ -65,7 +65,7 @@ class DatabaseService {
           title: doc['title'] ?? '',
           description: doc['description'] ?? '',
           completed: doc['completed'] ?? false,
-          timeStamp: doc['timeStamp'] ?? '');
+          timeStamp: doc['createAt'] ?? ''); // Pastikan field ini sesuai
     }).toList();
   }
 }

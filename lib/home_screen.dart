@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_task_app/login_screen.dart';
 import 'package:todo_task_app/model/todo_model.dart';
@@ -130,66 +129,67 @@ class _HomeScreenState extends State<HomeScreen> {
     final DatabaseService _databaseServise = DatabaseService();
 
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text(
-              todo == null ? "Add Task" : "Edit Task",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            todo == null ? "Add Task" : "Edit Task",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                      labelText: "Title",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      labelText: "Description",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
               ),
             ),
-            content: SingleChildScrollView(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _titleController,
-                      decoration: InputDecoration(
-                        labelText: "Title",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      controller: _descriptionController,
-                      decoration: InputDecoration(
-                        labelText: "Description",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancel"),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("Cancel"),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigo,
+                foregroundColor: Colors.white,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () async {
-                  if (todo == null) {
-                    await _databaseServise.addTodoItem(
-                        _titleController.text, _descriptionController.text);
-                  } else {
-                    await _databaseServise.updateTodo(todo.id,
-                        _titleController.text, _descriptionController.text);
-                  }
-                  Navigator.pop(context);
-                },
-                child: Text(todo == null ? "Add" : "Update"),
-              ),
-            ],
-          );
-        });
+              onPressed: () async {
+                if (todo == null) {
+                  await _databaseServise.addTodoItem(
+                      _titleController.text, _descriptionController.text);
+                } else {
+                  await _databaseServise.updateTodo(todo.id,
+                      _titleController.text, _descriptionController.text);
+                }
+                Navigator.pop(context);
+              },
+              child: Text(todo == null ? "Add" : "Update"),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

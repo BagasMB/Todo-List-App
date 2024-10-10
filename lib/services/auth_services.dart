@@ -7,12 +7,15 @@ class AuthService {
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      UserCredential result =
-          await _auth.signInWithEmailAndPassword(email: email, password: password);
-      User? user = result.user;
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      // Menangani kesalahan autentikasi
+      throw e; // Meneruskan kesalahan ke UI untuk ditangani
     } catch (e) {
-      print(e.toString());
-      return null;
+      // Menangani kesalahan umum lainnya
+      throw Exception('Terjadi kesalahan saat login: $e');
     }
   }
 
@@ -22,9 +25,9 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      User? user = result.user;
+      return result.user;
     } catch (e) {
-      print(e.toString());
+      print("Registration error: $e");
       return null;
     }
   }
